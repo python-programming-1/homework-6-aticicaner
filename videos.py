@@ -73,6 +73,7 @@ def get_most_liked_and_disliked_channel(data):
     most_liked_and_disliked_channel = {'most_liked_channel': None, 'num_likes': None, 'most_disliked_channel': None, 'num_dislikes': None}
 
     temp_most_liked = {}
+    temp_most_disliked = {}
 
     for item in data[1:]:
         temp_most_liked.setdefault(item['channel_title'], 0)
@@ -89,13 +90,13 @@ def get_most_liked_and_disliked_channel(data):
     most_liked_and_disliked_channel['num_likes'] = likes_count
 
     for item in data[1:]:
-        temp_most_liked.setdefault(item['channel_title'], 0)
-        temp_most_liked[item['channel_title']] += int(item['dislikes'])
+        temp_most_disliked.setdefault(item['channel_title'], 0)
+        temp_most_disliked[item['channel_title']] += int(item['dislikes'])
 
     disliked_name = ""
     dislikes_count = 0
 
-    for field, possible_values in temp_most_liked.items():
+    for field, possible_values in temp_most_disliked.items():
         if possible_values > dislikes_count:
             disliked_name = field
             dislikes_count = possible_values
