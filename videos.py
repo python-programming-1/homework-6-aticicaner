@@ -42,6 +42,7 @@ def get_most_popular_and_least_popular_channel(data):
     most_popular_and_least_popular_channel = {'most_popular_channel': None, 'least_popular_channel': None, 'most_pop_num_views': None,
                                               'least_pop_num_views': None}
 
+    # temporary dict to keep channel names and their total views
     temp_most_popular = {}
 
     for item in data[1:]:
@@ -51,7 +52,10 @@ def get_most_popular_and_least_popular_channel(data):
     highest_name = ""
     highest = 0
     lowest_name= ""
-    lowest = 5000000
+    lowest = 500000000000 # unreasonably high starting point to start comparison
+
+    # look for highest and lowest view total channels in temp_most_popular dictionary
+    # parse once while looking for both o(N) time complexity
     for field, possible_values in temp_most_popular.items():
         if possible_values > highest:
             highest_name = field
@@ -60,6 +64,7 @@ def get_most_popular_and_least_popular_channel(data):
             lowest_name = field
             lowest = possible_values
 
+    # assign values to output
     most_popular_and_least_popular_channel['most_popular_channel'] = highest_name
     most_popular_and_least_popular_channel['most_pop_num_views'] = highest
     most_popular_and_least_popular_channel['least_popular_channel'] = lowest_name
@@ -75,6 +80,7 @@ def get_most_liked_and_disliked_channel(data):
     temp_most_liked = {}
     temp_most_disliked = {}
 
+    # parses data once split it to two dictionaries
     for item in data[1:]:
         temp_most_liked.setdefault(item['channel_title'], 0)
         temp_most_liked[item['channel_title']] += int(item['likes'])
@@ -84,22 +90,26 @@ def get_most_liked_and_disliked_channel(data):
     liked_name = ""
     likes_count = 0
 
+    # look for most liked channel
     for field, possible_values in temp_most_liked.items():
         if possible_values > likes_count:
             liked_name = field
             likes_count = possible_values
 
+    # assign values to output
     most_liked_and_disliked_channel['most_liked_channel'] = liked_name
     most_liked_and_disliked_channel['num_likes'] = likes_count
 
     disliked_name = ""
     dislikes_count = 0
 
+    #look for the most disliked channel
     for field, possible_values in temp_most_disliked.items():
         if possible_values > dislikes_count:
             disliked_name = field
             dislikes_count = possible_values
 
+    # assign values to output
     most_liked_and_disliked_channel['most_disliked_channel'] = disliked_name
     most_liked_and_disliked_channel['num_dislikes'] = dislikes_count
 
